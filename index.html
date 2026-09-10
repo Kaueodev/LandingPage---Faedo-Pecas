@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto Peças Faedo</title>
+
+<!-- Fontes usadas no site: Oswald (títulos) e Archivo (textos) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+  /* ======================================================================
+     1. VARIÁVEIS GLOBAIS
+     Todas as cores, fontes e a cor de destaque do site ficam centralizadas
+     aqui. Para trocar uma cor em TODO o site, basta mudar o valor abaixo
+     uma única vez — não é preciso procurar em cada bloco.
+     ====================================================================== */
+  :root{
+    /* Fundo (do mais escuro ao mais claro) */
+    --black:#15120F;      /* fundo principal do site */
+    --black-2:#1E1A16;    /* fundo de cards e painéis */
+    --black-3:#26221D;    /* fundo de caixas internas (ex: foto de vendedor) */
+
+    /* Laranja: usado só como DETALHE (ícones, traços finos, hover) */
+    --orange:#F2591B;
+    --orange-dark:#B8380A; /* reserva, caso precise de um laranja mais escuro no futuro */
+
+    /* Texto */
+    --paper:#EDE6D8;       /* texto principal / branco do site */
+    --paper-dim:#B4AC9C;   /* texto secundário, mais apagado */
+    --steel:#8A857C;       /* texto terciário / placeholders */
+
+    --line: rgba(237,230,216,0.14); /* cor das linhas e bordas finas */
+
+    /* Fontes */
+    --font-display:'Oswald', sans-serif; /* títulos grandes, caixa alta */
+    --font-body:'Archivo', sans-serif;   /* parágrafos, botões, menus */
+  }
+
+  /* ======================================================================
+     2. RESET BÁSICO
+     Remove espaçamentos padrão do navegador para o layout ficar previsível.
+     ====================================================================== */
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; } /* rolagem suave ao clicar nos links do menu */
+
+  body{
+    background:var(--black);
+    color:var(--paper);
+    font-family:var(--font-body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img,svg{ display:block; max-width:100%; }
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  button, input, textarea{ font-family:inherit; font-size:1rem; color:inherit; border-radius:0; }
+  :focus-visible{ outline:2px solid var(--orange); outline-offset:3px; }
+
+  /* Largura máxima do conteúdo, centralizado, usada em quase todo bloco */
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ======================================================================
+     3. FAIXA DECORATIVA (linha laranja/preta fina)
+     É o traço diagonal usado como divisor entre seções.
+     Para tirar essa faixa de vez, basta remover as <div class="stripe">
+     do HTML — o CSS pode continuar aqui sem problema.
+     ====================================================================== */
+  .stripe{
+    height:4px;
+    width:100%;
+    background: repeating-linear-gradient(
+      135deg,
+      var(--orange) 0 18px,
+      var(--black) 18px 36px
+    );
+  }
+
+  /* ======================================================================
+     4. CABEÇALHO (logo + menu + botão "Entre em contato")
+     ====================================================================== */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(21,18,15,0.94);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+
+  .nav-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:78px;
+  }
+
+  /* --- Logo (marca + nome) --- */
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.4rem;
+    letter-spacing:0.5px;
+    color:var(--paper);
+  }
+
+  /* Caixa da logo em PNG. Troque o arquivo "logo.png" (mesma pasta do
+     index.html) para a sua imagem — o tamanho da caixa é controlado aqui. */
+  .logo-mark{
+    width:42px;
+    height:42px;
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    overflow:hidden;
+  }
+  .logo-mark img{ width:100%; height:100%; object-fit:contain; }
+  /* Enquanto não existir logo.png, mostra o texto "LOGO" como aviso visual */
+  .logo-mark.empty::after{
+    content:"LOGO";
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.55rem;
+    letter-spacing:0.6px;
+    color:var(--steel);
+  }
+
+  .logo span{ color:var(--orange); } /* "AUTO PEÇAS" em destaque */
+
+  /* --- Menu de navegação (desktop) --- */
+  nav.links{
+    display:flex;
+    align-items:center;
+    gap:34px;
+  }
+
+  nav.links a{
+    font-size:0.95rem;
+    color:var(--paper-dim);
+    padding:6px 0;
+    border-bottom:2px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  nav.links a:hover{
+    color:var(--paper);
+    border-color:var(--orange);
+  }
+
+  /* Item de menu "Catálogo (em construção)" — não é mais um link para uma
+     seção da página, é só um aviso. Para reativar o link, troque a <span>
+     do HTML de volta para uma <a href="#catalogo">. */
+  .nav-catalog{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.95rem;
+    color:var(--paper-dim);
+    cursor:default;
+  }
+  .nav-catalog .badge{
+    font-size:0.7rem;
+    font-weight:600;
+    letter-spacing:0.3px;
+    color:var(--steel);
+    border:1px solid var(--line);
+    padding:3px 8px;
+    white-space:nowrap;
+  }
+
+  /* --- Botão "Entre em contato" no canto direito --- */
+  .nav-cta{
+    display:inline-flex;
+    align-items:center;
+    padding:10px 20px;
+    background:var(--paper);
+    color:var(--black);
+    font-weight:600;
+    font-size:0.92rem;
+    border:2px solid var(--paper);
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .nav-cta:hover{ background:transparent; color:var(--paper); border-color:var(--orange); }
+
+  /* --- Botão hambúrguer (menu mobile) --- */
+  .burger{
+    display:none;
+    flex-direction:column;
+    gap:5px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:8px;
+  }
+  .burger span{ width:24px; height:2px; background:var(--paper); display:block; }
+
+  /* ======================================================================
+     5. HERO (bloco de abertura, logo abaixo do cabeçalho)
+     ====================================================================== */
+  .hero{
+    position:relative;
+    padding:110px 0 90px;
+    /* fundo sólido — o fundo quadriculado que existia aqui foi removido */
+    background:var(--black);
+    overflow:hidden;
+  }
+
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:48px;
+    align-items:center;
+  }
+
+  .kicker{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:22px;
+  }
+  .kicker .dash{ width:36px; height:3px; background:var(--orange); }
+  .kicker span{ font-size:0.95rem; color:var(--paper-dim); }
+
+  .hero h1{
+    font-family:var(--font-display);
+    text-transform:uppercase;
+    font-weight:700;
+    font-size:clamp(2.6rem, 5.2vw, 4.4rem);
+    line-height:1.03;
+    letter-spacing:0.5px;
+    color:var(--paper);
+    max-width:12ch;
+  }
+  .hero h1 em{ font-style:normal; color:var(--orange); } /* palavra em destaque no título */
+
+  .hero p.lead{
+    margin-top:26px;
+    font-size:1.12rem;
+    color:var(--paper-dim);
+    max-width:46ch;
+  }
+
+  .hero-actions{
+    margin-top:38px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+
+  /* --- Botões (usados no hero, catálogo, formulário) --- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:15px 26px;
+    font-weight:600;
+    font-size:0.98rem;
+    border:2px solid var(--paper);
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease, border-color .15s ease, transform .1s ease;
+  }
+  .btn-solid{ background:var(--paper); color:var(--black); }
+  .btn-solid:hover{ background:transparent; color:var(--paper); border-color:var(--orange); }
+  .btn-outline{ background:transparent; color:var(--paper); }
+  .btn-outline:hover{ border-color:var(--orange); }
+  .btn:active{ transform:translateY(1px); }
+
+  /* --- Painel "Por que a Faedo" (cartão do lado direito do hero) --- */
+  .hero-panel{
+    position:relative;
+    border:1px solid var(--line);
+    background:var(--black-2);
+    padding:30px;
+    box-shadow:10px 10px 0 var(--black-3); /* sombra "carimbada", sem desfoque */
+  }
+  .hero-panel .corner{
+    position:absolute;
+    width:22px;
+    height:22px;
+    border:3px solid var(--paper);
+  }
+  .hero-panel .corner.tl{ top:-3px; left:-3px; border-right:none; border-bottom:none; }
+  .hero-panel .corner.br{ bottom:-3px; right:-3px; border-left:none; border-top:none; }
+
+  .hero-panel h3{
+    font-family:var(--font-display);
+    font-size:1.1rem;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    margin-bottom:18px;
+    color:var(--paper);
+  }
+
+  .stat-row{
+    display:flex;
+    justify-content:space-between;
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+    font-size:0.95rem;
+  }
+  .stat-row:last-child{ border-bottom:none; }
+  .stat-row span:first-child{ color:var(--paper-dim); }
+  .stat-row span:last-child{ color:var(--paper); font-weight:600; }
+
+  /* ======================================================================
+     6. CABEÇALHO DE SEÇÃO (título + etiqueta), reutilizado em cada bloco
+     ====================================================================== */
+  section{ padding:96px 0; }
+
+  .section-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    margin-bottom:52px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:24px;
+  }
+  .section-head h2{
+    font-family:var(--font-display);
+    text-transform:uppercase;
+    font-size:clamp(1.7rem, 3vw, 2.3rem);
+    letter-spacing:0.5px;
+  }
+  .section-head .tag{
+    font-size:0.95rem;
+    color:var(--paper-dim);
+    font-weight:600;
+    white-space:nowrap;
+  }
+
+  /* ======================================================================
+     7. SOBRE NÓS
+     ====================================================================== */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:start;
+  }
+  .about-grid p{
+    color:var(--paper-dim);
+    font-size:1.05rem;
+    margin-bottom:18px;
+    max-width:52ch;
+  }
+
+  /* Caixa de foto vazia — troque por uma <img> quando tiver a foto pronta */
+  .about-figure{
+    position:relative;
+    height:100%;
+    min-height:320px;
+    background:var(--black-2);
+    border:1px dashed var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px;
+  }
+  .about-figure .placeholder{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    text-align:center;
+  }
+  .about-figure .placeholder svg{ width:46px; height:46px; stroke:var(--steel); }
+  .about-figure .placeholder span{
+    font-size:0.88rem;
+    color:var(--paper-dim);
+    max-width:26ch;
+  }
+
+  /* ======================================================================
+     8. MISSÃO / VISÃO / VALORES
+     Três colunas iguais. Cada coluna é o bloco ".pillar" no HTML —
+     copie um bloco inteiro se precisar adicionar uma quarta coluna
+     (e ajuste "repeat(3, 1fr)" abaixo para o novo número de colunas).
+     ====================================================================== */
+  .pillars{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+  }
+  .pillar{
+    padding:0 36px;
+    border-left:1px solid var(--line);
+  }
+  .pillar:first-child{ border-left:none; padding-left:0; }
+  .pillar:last-child{ padding-right:0; }
+
+  .pillar .icon-box{
+    width:52px;
+    height:52px;
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:22px;
+  }
+  .pillar .icon-box svg{ width:26px; height:26px; stroke:var(--orange); }
+
+  .pillar h3{
+    font-family:var(--font-display);
+    text-transform:uppercase;
+    font-size:1.25rem;
+    letter-spacing:0.5px;
+    margin-bottom:14px;
+  }
+  .pillar p{ color:var(--paper-dim); font-size:0.98rem; margin-bottom:12px; }
+
+  .pillar ul li{
+    color:var(--paper-dim);
+    font-size:0.96rem;
+    padding-left:16px;
+    position:relative;
+    margin-bottom:10px;
+  }
+  .pillar ul li::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0.55em;
+    width:6px;
+    height:6px;
+    background:var(--orange);
+  }
+
+  /* ======================================================================
+     9. LOCALIZAÇÃO
+     ====================================================================== */
+  .loc-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:0;
+    border:1px solid var(--line);
+  }
+
+  .loc-info{ padding:44px; background:var(--black-2); }
+  .loc-info .row{ display:flex; gap:16px; margin-bottom:26px; }
+  .loc-info .row:last-child{ margin-bottom:0; }
+  .loc-info .row svg{ width:22px; height:22px; stroke:var(--orange); flex-shrink:0; margin-top:2px; }
+  .loc-info .row h4{
+    font-family:var(--font-display);
+    font-size:0.95rem;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    margin-bottom:6px;
+    color:var(--paper);
+  }
+  .loc-info .row p{ color:var(--paper-dim); font-size:0.95rem; }
+
+  /* Área do mapa — fundo sólido (o fundo quadriculado que existia
+     aqui também foi removido). Pode ser trocado por um <iframe> do
+     Google Maps quando o endereço final estiver definido. */
+  .loc-map{
+    position:relative;
+    background:var(--black-3);
+    min-height:320px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .loc-map .pin{ display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .loc-map .pin svg{ width:40px; height:40px; stroke:var(--orange); }
+  .loc-map .pin span{ font-size:0.85rem; color:var(--paper-dim); }
+
+  /* ======================================================================
+     10. CONTATO (formulário + informações diretas)
+     ====================================================================== */
+  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:60px; }
+
+  .field{ margin-bottom:20px; }
+  .field label{ display:block; font-size:0.88rem; color:var(--paper-dim); margin-bottom:8px; }
+  .field input,
+  .field textarea{
+    width:100%;
+    background:var(--black-2);
+    border:1px solid var(--line);
+    padding:13px 14px;
+    color:var(--paper);
+  }
+  .field input:focus,
+  .field textarea:focus{ border-color:var(--orange); }
+  .field textarea{ min-height:120px; resize:vertical; }
+
+  .contact-direct{
+    padding:36px;
+    background:var(--black-2);
+    border:1px solid var(--line);
+    height:fit-content;
+  }
+  .contact-direct h3{
+    font-family:var(--font-display);
+    text-transform:uppercase;
+    font-size:1.1rem;
+    letter-spacing:0.4px;
+    margin-bottom:24px;
+  }
+  .contact-direct .row{ display:flex; gap:14px; align-items:flex-start; margin-bottom:20px; }
+  .contact-direct .row svg{ width:20px; height:20px; stroke:var(--orange); flex-shrink:0; margin-top:2px; }
+  .contact-direct .row div span{ display:block; color:var(--paper-dim); font-size:0.85rem; margin-bottom:2px; }
+  .contact-direct .row div strong{ font-weight:600; font-size:0.98rem; }
+
+  .form-note{ margin-top:8px; font-size:0.85rem; color:var(--steel); }
+
+  /* ======================================================================
+     11. RODAPÉ
+     ====================================================================== */
+  footer{ background:var(--black-2); border-top:1px solid var(--line); padding:48px 0 28px; }
+  .footer-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:24px;
+    padding-bottom:28px;
+    margin-bottom:24px;
+    border-bottom:1px solid var(--line);
+  }
+  .footer-links{ display:flex; gap:26px; flex-wrap:wrap; }
+  .footer-links a{ color:var(--paper-dim); font-size:0.92rem; }
+  .footer-links a:hover{ color:var(--orange); }
+  .footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+    font-size:0.85rem;
+    color:var(--steel);
+  }
+
+  /* ======================================================================
+     12. ANIMAÇÃO DE ENTRADA (só o hero usa isso, ao carregar a página)
+     ====================================================================== */
+  .reveal{ opacity:0; transform:translateY(14px); }
+  .reveal.in{ opacity:1; transform:translateY(0); transition:opacity .7s ease, transform .7s ease; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .reveal{ opacity:1; transform:none; }
+  }
+
+  /* ======================================================================
+     13. RESPONSIVO (telas menores que 960px — tablets e celulares)
+     ====================================================================== */
+  @media (max-width:960px){
+    nav.links{ display:none; }
+    .burger{ display:flex; }
+    .hero-grid{ grid-template-columns:1fr; }
+    .about-grid{ grid-template-columns:1fr; }
+    .pillars{ grid-template-columns:1fr; }
+    .pillar{ border-left:none; border-top:1px solid var(--line); padding:32px 0 0; margin-top:32px; }
+    .pillar:first-child{ border-top:none; padding-top:0; margin-top:0; }
+    .loc-grid{ grid-template-columns:1fr; }
+    .contact-grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==========================================================================
+     CABEÇALHO — logo + menu + botão de contato
+     ========================================================================== -->
+<header>
+  <div class="wrap nav-row">
+
+    <!-- Logo: troque "logo.png" pela sua imagem (mesma pasta do index.html) -->
+    <a href="#topo" class="logo">
+      <span class="logo-mark" id="logoMarkHeader">
+        <img src="img/logo.png" alt="Logo Auto Peças Faedo"
+             onerror="this.style.display='none'; this.parentElement.classList.add('empty')"
+             onload="this.parentElement.classList.remove('empty')">
+      </span>
+      FAEDO <span>AUTO PEÇAS</span>
+    </a>
+
+    <!-- Menu principal: cada <a> aqui aponta para o id de uma <section> abaixo -->
+    <nav class="links" id="navLinks">
+      <a href="#sobre">Sobre</a>
+      <a href="#missao">Missão e valores</a>
+      <a href="#localizacao">Localização</a>
+      <!-- "Catálogo" não é mais um link, é só um aviso de "em construção".
+           Quando o catálogo existir, troque esta <span> por:
+           <a href="#catalogo">Catálogo</a> -->
+      <span class="nav-catalog">Catálogo <span class="badge">em construção</span></span>
+    </nav>
+
+    <a href="https://wa.me/5544999999999" class="nav-cta" target="_blank">Entre em contato</a> <!--Fazer ir direto para o whatsapp e APP não para o menu de entre em contato-->
+
+    <!-- Botão do menu mobile -->
+    <button class="burger" id="burgerBtn" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="stripe"></div>
+
+<main id="topo">
+
+  <!-- ========================================================================
+       HERO — primeira dobra da página
+       ======================================================================== -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+
+      <!-- Texto principal do hero -->
+      <div class="reveal" id="heroText">
+        <div class="kicker"><span class="dash"></span><span>Autopeças no Sudoeste do Paraná</span></div>
+        <h1>Peça certa, na hora <em>certa</em></h1>
+        <p class="lead">A Faedo abastece oficinas, mecânicos e motoristas com peças de procedência garantida — do motor ao acabamento, com orientação técnica de quem entende de carro.</p>
+        <div class="hero-actions">
+          <a href="https://wa.me/5544999999999" class="btn btn-solid" target="_blank">Falar com um vendedor</a>
+          <a href="#sobre" class="btn btn-outline">Conhecer a Faedo</a>
+        </div>
+      </div>
+
+      <!-- Painel de destaques ao lado do hero. Edite as linhas dentro
+           de "stat-row" para trocar o texto de cada item. -->
+      <div class="hero-panel reveal" id="heroPanel">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <h3>Por que a Faedo</h3>
+        <div class="stat-row"><span>Consulta técnica</span><span>Com a equipe</span></div>
+        <div class="stat-row"><span>Peças em estoque</span><span>Pronta entrega</span></div>
+        <div class="stat-row"><span>Atendimento</span><span>Balcão e WhatsApp</span></div>
+        <div class="stat-row"><span>Catálogo online</span><span>Em breve</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SOBRE NÓS
+       ======================================================================== -->
+  <section id="sobre">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Sobre nós</h2>
+        <span class="tag">Quem é a Faedo</span>
+      </div>
+      <div class="about-grid">
+
+        <!-- Texto institucional -->
+        <div>
+          <p>A Auto Peças Faedo nasceu do balcão de uma oficina de bairro e cresceu peça por peça, até se tornar referência para quem precisa resolver o carro sem enrolação. Hoje atendemos oficinas mecânicas, autônomos e motoristas que buscam a peça certa, no prazo certo.</p>
+          <p>Trabalhamos com fornecedores homologados e conferimos cada item antes de sair do balcão — porque uma peça errada custa tempo, e tempo parado é o que ninguém quer numa oficina.</p>
+          <p>Mais do que vender, ajudamos a diagnosticar. Nossa equipe conhece os veículos que passam pela região e sabe indicar a peça compatível, mesmo quando o cliente só sabe descrever o barulho.</p>
+        </div>
+
+        <!-- Campo vazio para foto da loja/equipe. Para usar uma foto real,
+             troque todo o conteúdo de ".about-figure" por:
+             <img src="sua-foto.jpg" alt="Loja Auto Peças Faedo"> -->
+        <div class="about-figure">
+          <div class="placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="15"/><circle cx="9" cy="10" r="2"/><path d="m21 15-5-4-4 4-3-2-6 5"/></svg>
+            <span>Foto da loja ou da equipe entra aqui</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div style="border-top:1px solid var(--line)"></div></div>
+
+  <!-- ========================================================================
+       MISSÃO / VISÃO / VALORES
+       Cada bloco ".pillar" é independente — pode reordenar, editar o texto
+       ou duplicar um bloco inteiro sem afetar os outros dois.
+       ======================================================================== -->
+  <section id="missao">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Missão, visão e valores</h2>
+        <span class="tag">O que nos move</span>
+      </div>
+      <div class="pillars">
+
+        <!-- Bloco 1: Missão -->
+        <div class="pillar reveal">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3>Missão</h3>
+          <p>Fornecer peças automotivas com agilidade e precisão técnica, para que cada veículo volte à estrada com segurança e desempenho.</p>
+        </div>
+
+        <!-- Bloco 2: Visão -->
+        <div class="pillar reveal">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3>Visão</h3>
+          <p>Ser a referência regional em autopeças, reconhecida pela confiança de oficinas, mecânicos e motoristas em cada atendimento.</p>
+        </div>
+
+        <!-- Bloco 3: Valores (lista em vez de parágrafo — adicione ou
+             remova <li> livremente) -->
+        <div class="pillar reveal">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17l1 1 5.3-5.3a4 4 0 0 1 5.4-5.4Z"/><path d="M4 20l1-1"/></svg>
+          </div>
+          <h3>Valores</h3>
+          <ul>
+            <li>Procedência garantida em cada peça</li>
+            <li>Orientação técnica honesta</li>
+            <li>Agilidade na entrega</li>
+            <li>Relação de confiança de longo prazo</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="stripe"></div>
+
+  <!-- ========================================================================
+       LOCALIZAÇÃO
+       ======================================================================== -->
+  <section id="localizacao">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Onde estamos</h2>
+        <span class="tag">Localização</span>
+      </div>
+      <div class="loc-grid">
+
+        <!-- Coluna de texto: endereço, horário, telefone -->
+        <div class="loc-info">
+          <div class="row">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <div>
+              <h4>Endereço</h4>
+              <p>Rua [Nome da Rua], 000 — Bairro<br>Francisco Beltrão, PR</p>
+            </div>
+          </div>
+          <div class="row">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            <div>
+              <h4>Horário</h4>
+              <p>Segunda a sexta, 8h às 18h<br>Sábado, 8h às 12h</p>
+            </div>
+          </div>
+          <div class="row">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2Z"/></svg>
+            <div>
+              <h4>Telefone</h4>
+              <p>(46) 0000-0000</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna do mapa: placeholder estilizado. Pode ser trocado por um
+             <iframe src="..."> do Google Maps quando tiver o endereço final. -->
+        <div class="loc-map">
+          <div class="pin">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <span>Mapa — a integrar com o endereço final</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="stripe"></div>
+
+  <!-- ========================================================================
+       CONTATO — formulário + informações diretas
+       ======================================================================== -->
+  <section id="contato">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Entre em contato</h2>
+        <span class="tag">Vamos resolver seu carro</span>
+      </div>
+      <div class="contact-grid">
+
+        <!-- Formulário (ainda não envia para nenhum servidor — ver o
+             <script> no fim da página) -->
+        <form id="contactForm">
+          <div class="field">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+          </div>
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="voce@email.com" required>
+          </div>
+          <div class="field">
+            <label for="telefone">Telefone</label>
+            <input type="tel" id="telefone" name="telefone" placeholder="(46) 00000-0000">
+          </div>
+          <div class="field">
+            <label for="mensagem">Mensagem</label>
+            <textarea id="mensagem" name="mensagem" placeholder="Diga qual peça ou veículo você procura"></textarea>
+          </div>
+          <button type="submit" class="btn btn-solid">Enviar mensagem</button>
+          <p class="form-note" id="formNote">Protótipo — o envio ainda não está conectado a um servidor.</p>
+        </form>
+
+        <!-- Bloco de contatos diretos: cada ".row" é um canal (WhatsApp,
+             telefone, e-mail, Instagram) — duplique um "row" para adicionar
+             outro canal de contato. -->
+        <div class="contact-direct">
+          <h3>Fale direto com a gente</h3>
+          <div class="row">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L4 20l1-4.6A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+            <div><span>WhatsApp</span><strong>(46) 00000-0000</strong></div>
+          </div>
+          <div class="row">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2Z"/></svg>
+            <div><span>Telefone</span><strong>(46) 0000-0000</strong></div>
+          </div>
+          <div class="row">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14"/><path d="m3 7 9 6 9-6"/></svg>
+            <div><span>E-mail</span><strong>contato@autopecasfaedo.com.br</strong></div>
+          </div>
+          <div class="row">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="var(--orange)" stroke="none"/></svg>
+            <div><span>Instagram</span><strong>@autopecasfaedo</strong></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==========================================================================
+     RODAPÉ
+     ========================================================================== -->
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <a href="#topo" class="logo">
+        <span class="logo-mark">
+          <img src="logo.png" alt="Logo Auto Peças Faedo"
+               onerror="this.style.display='none'; this.parentElement.classList.add('empty')"
+               onload="this.parentElement.classList.remove('empty')">
+        </span>
+        FAEDO <span>AUTO PEÇAS</span>
+      </a>
+      <div class="footer-links">
+        <a href="#sobre">Sobre</a>
+        <a href="#missao">Missão e valores</a>
+        <a href="#localizacao">Localização</a>
+        <a href="#contato">Contato</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Auto Peças Faedo. Todos os direitos reservados.</span>
+      <span>Protótipo de landing page — conteúdo e dados de exemplo.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ------------------------------------------------------------------------
+     MENU MOBILE
+     Abre/fecha a navegação quando o botão hambúrguer é clicado, e fecha o
+     menu automaticamente quando um link é clicado (em telas pequenas).
+     ------------------------------------------------------------------------ */
+  const burger = document.getElementById('burgerBtn');
+  const navLinks = document.getElementById('navLinks');
+
+  burger.addEventListener('click', () => {
+    const open = navLinks.style.display === 'flex';
+    navLinks.style.display = open ? 'none' : 'flex';
+    navLinks.style.flexDirection = 'column';
+    navLinks.style.position = 'absolute';
+    navLinks.style.top = '78px';
+    navLinks.style.left = '0';
+    navLinks.style.right = '0';
+    navLinks.style.background = 'rgba(21,18,15,0.98)';
+    navLinks.style.padding = '20px 28px';
+    navLinks.style.borderBottom = '1px solid var(--line)';
+    navLinks.style.gap = '18px';
+  });
+
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    if (window.innerWidth <= 960) navLinks.style.display = 'none';
+  }));
+
+  /* ------------------------------------------------------------------------
+     ANIMAÇÃO DE ENTRADA DO HERO
+     Só acontece uma vez, ao carregar a página. O texto aparece primeiro,
+     o painel "Por que a Faedo" aparece 150ms depois.
+     ------------------------------------------------------------------------ */
+  window.addEventListener('load', () => {
+    document.getElementById('heroText').classList.add('in');
+    setTimeout(() => document.getElementById('heroPanel').classList.add('in'), 150);
+  });
+
+  /* ------------------------------------------------------------------------
+     ANIMAÇÃO DOS BLOCOS DE MISSÃO/VISÃO/VALORES
+     Cada bloco aparece suavemente quando entra na tela ao rolar a página.
+     ------------------------------------------------------------------------ */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.pillar.reveal').forEach(el => io.observe(el));
+
+  /* ------------------------------------------------------------------------
+     FORMULÁRIO DE CONTATO (DEMONSTRAÇÃO)
+     Por enquanto só mostra uma mensagem de confirmação — não envia para
+     nenhum servidor ainda. Para conectar de verdade, troque o conteúdo
+     deste bloco por uma chamada a um serviço de e-mail/backend.
+     ------------------------------------------------------------------------ */
+  const form = document.getElementById('contactForm');
+  const note = document.getElementById('formNote');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    note.textContent = 'Mensagem pronta para envio — conecte este formulário a um servidor ou serviço de e-mail.';
+    note.style.color = 'var(--paper)';
+  });
+</script>
+
+</body>
+</html>
