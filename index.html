@@ -138,7 +138,7 @@
     color:var(--steel);
   }
 
-  .logo span{ color:var(--orange); } /* "AUTO PEÇAS" em destaque */
+  .logo span{ color:var(--white); } /* "AUTO PEÇAS" em destaque */
 
   /* --- Menu de navegação (desktop) --- */
   nav.links{
@@ -583,7 +583,7 @@
              onerror="this.style.display='none'; this.parentElement.classList.add('empty')"
              onload="this.parentElement.classList.remove('empty')">
       </span>
-      FAEDO <span>AUTO PEÇAS</span>
+       <span>AUTO PEÇAS FAEDO</span>
     </a>
 
     <!-- Menu principal: cada <a> aqui aponta para o id de uma <section> abaixo -->
@@ -594,7 +594,7 @@
       <!-- "Catálogo" não é mais um link, é só um aviso de "em construção".
            Quando o catálogo existir, troque esta <span> por:
            <a href="#catalogo">Catálogo</a> -->
-      <span class="nav-catalog">Catálogo <span class="badge">em construção</span></span>
+      <span class="nav-catalog">Catálogo (Em Construção)</span>
     </nav>
 
     <a href="https://wa.me/5544999999999" class="nav-cta" target="_blank">Entre em contato</a> <!--Fazer ir direto para o whatsapp e APP não para o menu de entre em contato-->
@@ -620,7 +620,7 @@
       <div class="reveal" id="heroText">
        <!-- <div class="kicker"><span class="dash"></span><span>Autopeças no Sudoeste do Paraná</span></div>-->
         <h1>Peça certa, na hora <em>certa</em></h1>
-        <p class="lead">A Faedo abastece oficinas, mecânicos e motoristas com peças de procedência garantida — do motor ao acabamento, com orientação técnica de quem entende de carro.</p>
+        <p class="lead">A Faedo abastece oficinas, mecânicos e motoristas com peças de procedência garantida. Do motor ao acabamento, com orientação técnica de quem entende de carro.</p>
         <div class="hero-actions">
           <a href="https://wa.me/5544999999999" class="btn btn-solid" target="_blank">Falar com um vendedor</a>
           <a href="#sobre" class="btn btn-outline">Conhecer a Faedo</a>
@@ -631,7 +631,7 @@
            de "stat-row" para trocar o texto de cada item. -->
       <div class="hero-panel reveal" id="heroPanel">
         <span class="corner tl"></span><span class="corner br"></span>
-        <h3>Por que a Faedo</h3>
+        <h3>Por que a Faedo?</h3>
         <div class="stat-row"><span>Consulta técnica</span><span>Com a equipe</span></div>
         <div class="stat-row"><span>Peças em estoque</span><span>Pronta entrega</span></div>
         <div class="stat-row"><span>Atendimento</span><span>Balcão e WhatsApp</span></div>
@@ -648,7 +648,7 @@
     <div class="wrap">
       <div class="section-head">
         <h2>Sobre nós</h2>
-        <span class="tag">Quem é a Faedo</span>
+        <span class="tag">Quem é a Faedo?</span>
       </div>
       <div class="about-grid">
 
@@ -678,7 +678,7 @@
     <div class="wrap">
       <div class="section-head">
         <h2>Missão, visão e valores</h2>
-        <span class="tag">O que nos move</span>
+        <span class="tag">O que nos move?</span>
       </div>
       <div class="pillars">
 
@@ -738,21 +738,21 @@
             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg>
             <div>
               <h4>Endereço</h4>
-              <p>Rua [Nome da Rua], 000 — Bairro<br>Francisco Beltrão, PR</p>
+              <p>PR 180 Nº 4500 — Bairro Água Branca<br>Marmeleiro, PR</p>
             </div>
           </div>
           <div class="row">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
             <div>
               <h4>Horário</h4>
-              <p>Segunda a sexta, 8h às 18h<br>Sábado, 8h às 12h</p>
+              <p>Segunda a sexta, 8h às 12h - 13:12h às 18h</p>
             </div>
           </div>
           <div class="row">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2Z"/></svg>
             <div>
               <h4>Telefone</h4>
-              <p>(46) 0000-0000</p>
+              <p>(46) 3524-3542</p>
             </div>
           </div>
         </div>
@@ -779,32 +779,8 @@
     <div class="wrap">
       <div class="section-head">
         <h2>Entre em contato</h2>
-        <span class="tag">Vamos resolver seu carro</span>
       </div>
       <div class="contact-grid">
-
-        <!-- Formulário (ainda não envia para nenhum servidor — ver o
-             <script> no fim da página) -->
-        <form id="contactForm">
-          <div class="field">
-            <label for="nome">Nome</label>
-            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
-          </div>
-          <div class="field">
-            <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" placeholder="voce@email.com" required>
-          </div>
-          <div class="field">
-            <label for="telefone">Telefone</label>
-            <input type="tel" id="telefone" name="telefone" placeholder="(46) 00000-0000">
-          </div>
-          <div class="field">
-            <label for="mensagem">Mensagem</label>
-            <textarea id="mensagem" name="mensagem" placeholder="Diga qual peça ou veículo você procura"></textarea>
-          </div>
-          <button type="submit" class="btn btn-solid">Enviar mensagem</button>
-          <p class="form-note" id="formNote">Protótipo — o envio ainda não está conectado a um servidor.</p>
-        </form>
 
         <!-- Bloco de contatos diretos: cada ".row" é um canal (WhatsApp,
              telefone, e-mail, Instagram) — duplique um "row" para adicionar
@@ -813,15 +789,15 @@
           <h3>Fale direto com a gente</h3>
           <div class="row">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L4 20l1-4.6A8.5 8.5 0 1 1 21 11.5Z"/></svg>
-            <div><span>WhatsApp</span><strong>(46) 00000-0000</strong></div>
+            <div><span>WhatsApp</span><strong>(46) 3524-3542</strong></div>
           </div>
           <div class="row">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2Z"/></svg>
-            <div><span>Telefone</span><strong>(46) 0000-0000</strong></div>
+            <div><span>Telefone</span><strong>(46) 3524-3542</strong></div>
           </div>
           <div class="row">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14"/><path d="m3 7 9 6 9-6"/></svg>
-            <div><span>E-mail</span><strong>contato@autopecasfaedo.com.br</strong></div>
+            <div><span>E-mail</span><strong>pecasfaedo@hotmail.com</strong></div>
           </div>
           <div class="row">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="var(--orange)" stroke="none"/></svg>
@@ -843,11 +819,11 @@
     <div class="footer-row">
       <a href="#topo" class="logo">
         <span class="logo-mark">
-          <img src="logo.png" alt="Logo Auto Peças Faedo"
+          <img src="img/logo.png" alt="Logo Auto Peças Faedo"
                onerror="this.style.display='none'; this.parentElement.classList.add('empty')"
                onload="this.parentElement.classList.remove('empty')">
         </span>
-        FAEDO <span>AUTO PEÇAS</span>
+         <span>AUTO PEÇAS FAEDO</span>
       </a>
       <div class="footer-links">
         <a href="#sobre">Sobre</a>
@@ -858,7 +834,6 @@
     </div>
     <div class="footer-bottom">
       <span>© 2026 Auto Peças Faedo. Todos os direitos reservados.</span>
-      <span>Protótipo de landing page — conteúdo e dados de exemplo.</span>
     </div>
   </div>
 </footer>
@@ -893,7 +868,7 @@
   /* ------------------------------------------------------------------------
      ANIMAÇÃO DE ENTRADA DO HERO
      Só acontece uma vez, ao carregar a página. O texto aparece primeiro,
-     o painel "Por que a Faedo" aparece 150ms depois.
+     o painel "Por que a Faedo?" aparece 150ms depois.
      ------------------------------------------------------------------------ */
   window.addEventListener('load', () => {
     document.getElementById('heroText').classList.add('in');
